@@ -1,0 +1,44 @@
+import os
+import unittest
+import tempfile
+
+from rajesh_tailor_2 import generate_result
+
+class TestMaxCompanyPrice(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def _create_csv_file(self):
+        """
+            Create a dummy csv file.
+            Return its filename.
+        """
+        filename = tempfile.mktemp(".txt")
+        file_obj = open(filename, 'w')
+        file_obj.write("year,month,company 1,company 2,company 3\n")
+        file_obj.write("1990,jan,24,38,14\n")
+        file_obj.write("1990,dec,48,48,30\n")
+        file_obj.write("1992,dec,38,52,29\n")
+        file_obj.write("1995,july,40,45,35\n")
+        file_obj.write("1995,dec,38,38,38\n")
+
+        file_obj.close()
+        return filename
+
+
+    def test_generate_result(self):
+        filename = self._create_csv_file()
+
+        res = generate_result(filename)        
+
+        os.remove(filename)        
+
+        self.assertEqual(res, [(48.0,'1990','dec','company 1'),(52.0,'1992','dec','company 2'),(38.0,'1995','dec','company 3')])
+
+
+if __name__ == '__main__':
+   unittest.main()
+   
